@@ -1,4 +1,4 @@
-# PACE listening examples
+# RAPID listening examples
 
 Static demo page: open `index.html` in a browser, or host the folder on any
 static web server (GitHub Pages, anonymous.4open.science, etc.). No build
