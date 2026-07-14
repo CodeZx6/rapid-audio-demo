@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>PACE: Physical Priors as Adaptive Control for Frozen Diffusion Speech Enhancement</title>
+<title>RAPID: Reliable Acoustic Priors for Efficient Inference in Diffusion-based Speech Enhancement</title>
 <link rel="stylesheet" href="static/css/bulma.min.css"><link rel="stylesheet" href="static/css/index.css">
 <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Noto+Sans:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
@@ -13,7 +13,7 @@
     <div class="container is-max-desktop">
       <div class="columns is-centered">
         <div class="column has-text-centered">
-          <h1 class="title is-2 publication-title">PACE: Physical Priors as Adaptive Control for Frozen Diffusion Speech Enhancement</h1>
+          <h1 class="title is-2 publication-title">RAPID: Reliable Acoustic Priors for Efficient Inference in Diffusion-based Speech Enhancement</h1>
           <div class="is-size-5 publication-authors"><span class="author-block">Anonymous authors</span></div>
           <div class="is-size-6 publication-venue">Under double blind review</div>
           <div class="publication-links">
@@ -36,27 +36,27 @@
 <section class="section pt-2">
   <div class="container is-max-desktop">
     <h2 class="title is-3">Abstract</h2>
-    <div class="content abstract-text has-text-justified">Diffusion based speech enhancement restores plausible clean speech by iteratively applying a learned speech prior to a noisy mixture. However, efficient deployment on humanoid and embodied systems requires a frozen model to operate in real world acoustic scenes whose distributions shift with microphones, rooms, ego noise, and background sources. We formulate noisy speech as a hierarchy of physical structure, where reliable acoustic statistics such as the noise floor and articulation rhythm can be measured from the incoming mixture, whereas ambiguous fine speech detail remains the responsibility of the learned prior. Following this, we propose PACE, a training free physical prior adaptive conditioning module for diffusion and flow based speech enhancement. PACE estimates physical priors from each noisy utterance, forms a corrected mixture, and injects it into frozen samplers through the conditioning signal and starting state, while constrained step optimization selects the smallest validated number of function evaluations (NFE) that preserves quality. Across multiple diffusion based backbones and deployment regimes, PACE improves robustness under noise shift and reduces inference cost when physical priors explain structure that the sampler would otherwise need to generate.</div>
+    <div class="content abstract-text has-text-justified">Diffusion based speech enhancement restores plausible clean speech by iteratively applying a learned speech prior to a noisy mixture. However, efficient deployment on humanoid and embodied systems requires a frozen model to operate in real world acoustic scenes whose distributions shift with microphones, rooms, ego noise, and background sources. We formulate noisy speech as a hierarchy of physical structure, where reliable acoustic statistics such as the noise floor and articulation rhythm can be measured from the incoming mixture, whereas ambiguous fine speech detail remains the responsibility of the learned prior. Following this, we propose RAPID, a training free physical prior adaptive conditioning module for diffusion and flow based speech enhancement. RAPID estimates physical priors from each noisy utterance, forms a corrected mixture, and injects it into frozen samplers through the conditioning signal and starting state, while constrained step optimization selects the smallest validated number of function evaluations (NFE) that preserves quality. Across multiple diffusion based backbones and deployment regimes, RAPID improves robustness under noise shift and reduces inference cost when physical priors explain structure that the sampler would otherwise need to generate.</div>
   </div>
 </section>
 
 <section class="section pt-2 altband">
   <div class="container is-max-desktop">
     <h2 class="title is-3">Method</h2>
-    <figure class="pagefig"><img src="static/images/method.png" alt="PACE pipeline">
-    <figcaption>PACE measures the noise floor and the articulation modulation of each utterance, forms a corrected mixture, and hands it to the frozen sampler through three interfaces: the conditioning signal, the starting state, and the number of function evaluations selected by constrained step optimization. The backbone weights and the sampler update rule stay untouched.</figcaption></figure>
+    <figure class="pagefig"><img src="static/images/method.png" alt="RAPID pipeline">
+    <figcaption>RAPID measures the noise floor and the articulation modulation of each utterance, forms a corrected mixture, and hands it to the frozen sampler through three interfaces: the conditioning signal, the starting state, and the number of function evaluations selected by constrained step optimization. The backbone weights and the sampler update rule stay untouched.</figcaption></figure>
   </div>
 </section>
 
 <section class="section pt-2" id="humanoid">
   <div class="container is-robot">
     <h2 class="title is-3">Live on a humanoid head</h2>
-    <p class="content robotintro">Noisy utterances were played into a real room and picked up by the ear microphones of an Ameca humanoid head. Each captured utterance was enhanced on a remote GPU, and the enhanced speech was played back through the robot&rsquo;s chest speaker. The nine utterances below come from a single continuous take: four passes over the same nine sentences, each backbone at its default number of function evaluations (NFE) and the same frozen checkpoint with +PACE at a reduced NFE. Nothing is cut &mdash; the wait you see is the wait that happened in the room.</p>
-    <p class="content robotintro">Every trial has the same four stages: the robot <b>hears</b> the utterance, the frozen sampler runs its <b>inference</b>, the enhanced audio is <b>pushed</b> across the network into the robot&rsquo;s playback pipeline, and the robot <b>repeats</b> it. All four timelines in a row are drawn on one shared axis, so the stages line up and can be read off against each other: hearing and repeat are identical by construction, push is a fixed cost of a few tenths of a second, and inference is the only stage +PACE touches. Under each video you can also listen to the two ends of the pipeline on their own &mdash; what reached the microphones, and the enhanced speech that came back.</p>
+    <p class="content robotintro">Noisy utterances were played into a real room and picked up by the ear microphones of an Ameca humanoid head. Each captured utterance was enhanced on a remote GPU, and the enhanced speech was played back through the robot&rsquo;s chest speaker. The nine utterances below come from a single continuous take: four passes over the same nine sentences, each backbone at its default number of function evaluations (NFE) and the same frozen checkpoint with +RAPID at a reduced NFE. Nothing is cut &mdash; the wait you see is the wait that happened in the room.</p>
+    <p class="content robotintro">Every trial has the same four stages: the robot <b>hears</b> the utterance, the frozen sampler runs its <b>inference</b>, the enhanced audio is <b>pushed</b> across the network into the robot&rsquo;s playback pipeline, and the robot <b>repeats</b> it. All four timelines in a row are drawn on one shared axis, so the stages line up and can be read off against each other: hearing and repeat are identical by construction, push is a fixed cost of a few tenths of a second, and inference is the only stage +RAPID touches. Under each video you can also listen to the two ends of the pipeline on their own &mdash; what reached the microphones, and the enhanced speech that came back.</p>
     <article class='uttrow'><p class='transcript'>You can see it on the training ground and around the hotel.&hellip;</p><div class='bbgrid'><section class="bbbox">
 <h4 class="bbname">Schr&ouml;dinger bridge</h4>
 <div class="unitgrid"><div class="unit u-pace">
-<div class="uhead"><span class="ulabel">+PACE</span><span class="chips"><span class='mchip spchip'><b>3.0&times; faster inference</b></span><span class="mchip"><b>NFE = 12</b></span></span></div>
+<div class="uhead"><span class="ulabel">+RAPID</span><span class="chips"><span class='mchip spchip'><b>3.0&times; faster inference</b></span><span class="mchip"><b>NFE = 12</b></span></span></div>
 <div class="ubody">
 <video class="rv" controls playsinline preload="none" poster="robot/poster/sb_pace_vbd3.jpg" src="robot/video/sb_pace_vbd3.mp4"
  data-se="3.95" data-rp="4.68" data-lat="0.73" data-cmp="0.68" data-clip="8.63" data-axis="10.32"></video>
@@ -90,7 +90,7 @@
 </div></div></div></div></section><section class="bbbox">
 <h4 class="bbname">SGMSE+</h4>
 <div class="unitgrid"><div class="unit u-pace">
-<div class="uhead"><span class="ulabel">+PACE</span><span class="chips"><span class='mchip spchip'><b>2.1&times; faster inference</b></span><span class="mchip"><b>NFE = 12</b></span></span></div>
+<div class="uhead"><span class="ulabel">+RAPID</span><span class="chips"><span class='mchip spchip'><b>2.1&times; faster inference</b></span><span class="mchip"><b>NFE = 12</b></span></span></div>
 <div class="ubody">
 <video class="rv" controls playsinline preload="none" poster="robot/poster/sgmse_pace_vbd3.jpg" src="robot/video/sgmse_pace_vbd3.mp4"
  data-se="3.95" data-rp="5.07" data-lat="1.12" data-cmp="1.14" data-clip="9.02" data-axis="10.32"></video>
@@ -124,7 +124,7 @@
 </div></div></div></div></section></div></article><article class='uttrow'><p class='transcript'>A voice from beyond the world was calling.&hellip;</p><div class='bbgrid'><section class="bbbox">
 <h4 class="bbname">Schr&ouml;dinger bridge</h4>
 <div class="unitgrid"><div class="unit u-pace">
-<div class="uhead"><span class="ulabel">+PACE</span><span class="chips"><span class='mchip spchip'><b>3.0&times; faster inference</b></span><span class="mchip"><b>NFE = 12</b></span></span></div>
+<div class="uhead"><span class="ulabel">+RAPID</span><span class="chips"><span class='mchip spchip'><b>3.0&times; faster inference</b></span><span class="mchip"><b>NFE = 12</b></span></span></div>
 <div class="ubody">
 <video class="rv" controls playsinline preload="none" poster="robot/poster/sb_pace_lsm3.jpg" src="robot/video/sb_pace_lsm3.mp4"
  data-se="4.15" data-rp="4.89" data-lat="0.74" data-cmp="0.72" data-clip="9.04" data-axis="11.07"></video>
@@ -158,7 +158,7 @@
 </div></div></div></div></section><section class="bbbox">
 <h4 class="bbname">SGMSE+</h4>
 <div class="unitgrid"><div class="unit u-pace">
-<div class="uhead"><span class="ulabel">+PACE</span><span class="chips"><span class='mchip spchip'><b>2.1&times; faster inference</b></span><span class="mchip"><b>NFE = 12</b></span></span></div>
+<div class="uhead"><span class="ulabel">+RAPID</span><span class="chips"><span class='mchip spchip'><b>2.1&times; faster inference</b></span><span class="mchip"><b>NFE = 12</b></span></span></div>
 <div class="ubody">
 <video class="rv" controls playsinline preload="none" poster="robot/poster/sgmse_pace_lsm3.jpg" src="robot/video/sgmse_pace_lsm3.mp4"
  data-se="4.15" data-rp="5.37" data-lat="1.22" data-cmp="1.23" data-clip="9.52" data-axis="11.07"></video>
@@ -192,7 +192,7 @@
 </div></div></div></div></section></div></article><article class='uttrow'><p class='transcript'>The National Historical Survey found seismic activity.  Corey attacked the project with ex&hellip;</p><div class='bbgrid'><section class="bbbox">
 <h4 class="bbname">Schr&ouml;dinger bridge</h4>
 <div class="unitgrid"><div class="unit u-pace">
-<div class="uhead"><span class="ulabel">+PACE</span><span class="chips"><span class='mchip spchip'><b>3.5&times; faster inference</b></span><span class="mchip"><b>NFE = 12</b></span></span></div>
+<div class="uhead"><span class="ulabel">+RAPID</span><span class="chips"><span class='mchip spchip'><b>3.5&times; faster inference</b></span><span class="mchip"><b>NFE = 12</b></span></span></div>
 <div class="ubody">
 <video class="rv" controls playsinline preload="none" poster="robot/poster/sb_pace_dns2.jpg" src="robot/video/sb_pace_dns2.mp4"
  data-se="11.0" data-rp="12.63" data-lat="1.63" data-cmp="1.29" data-clip="23.63" data-axis="27.63"></video>
@@ -226,7 +226,7 @@
 </div></div></div></div></section><section class="bbbox">
 <h4 class="bbname">SGMSE+</h4>
 <div class="unitgrid"><div class="unit u-pace">
-<div class="uhead"><span class="ulabel">+PACE</span><span class="chips"><span class='mchip spchip'><b>2.3&times; faster inference</b></span><span class="mchip"><b>NFE = 12</b></span></span></div>
+<div class="uhead"><span class="ulabel">+RAPID</span><span class="chips"><span class='mchip spchip'><b>2.3&times; faster inference</b></span><span class="mchip"><b>NFE = 12</b></span></span></div>
 <div class="ubody">
 <video class="rv" controls playsinline preload="none" poster="robot/poster/sgmse_pace_dns2.jpg" src="robot/video/sgmse_pace_dns2.mp4"
  data-se="11.0" data-rp="13.55" data-lat="2.55" data-cmp="2.35" data-clip="24.55" data-axis="27.63"></video>
@@ -260,7 +260,7 @@
 </div></div></div></div></section></div></article><article class='uttrow'><p class='transcript'>had a tiny envelope tied to its wrist.  Diversity of perception, yes.  Diversity of fact,&hellip;</p><div class='bbgrid'><section class="bbbox">
 <h4 class="bbname">Schr&ouml;dinger bridge</h4>
 <div class="unitgrid"><div class="unit u-pace">
-<div class="uhead"><span class="ulabel">+PACE</span><span class="chips"><span class='mchip spchip'><b>3.6&times; faster inference</b></span><span class="mchip"><b>NFE = 12</b></span></span></div>
+<div class="uhead"><span class="ulabel">+RAPID</span><span class="chips"><span class='mchip spchip'><b>3.6&times; faster inference</b></span><span class="mchip"><b>NFE = 12</b></span></span></div>
 <div class="ubody">
 <video class="rv" controls playsinline preload="none" poster="robot/poster/sb_pace_dns3.jpg" src="robot/video/sb_pace_dns3.mp4"
  data-se="11.0" data-rp="12.56" data-lat="1.56" data-cmp="1.21" data-clip="23.56" data-axis="27.5"></video>
@@ -294,7 +294,7 @@
 </div></div></div></div></section><section class="bbbox">
 <h4 class="bbname">SGMSE+</h4>
 <div class="unitgrid"><div class="unit u-pace">
-<div class="uhead"><span class="ulabel">+PACE</span><span class="chips"><span class='mchip spchip'><b>2.3&times; faster inference</b></span><span class="mchip"><b>NFE = 12</b></span></span></div>
+<div class="uhead"><span class="ulabel">+RAPID</span><span class="chips"><span class='mchip spchip'><b>2.3&times; faster inference</b></span><span class="mchip"><b>NFE = 12</b></span></span></div>
 <div class="ubody">
 <video class="rv" controls playsinline preload="none" poster="robot/poster/sgmse_pace_dns3.jpg" src="robot/video/sgmse_pace_dns3.mp4"
  data-se="11.0" data-rp="13.5" data-lat="2.50" data-cmp="2.27" data-clip="24.5" data-axis="27.5"></video>
@@ -328,7 +328,7 @@
 </div></div></div></div></section></div></article><article class='uttrow'><p class='transcript'>in the audience and make guilty faces? He may try to phone us. Here&#x27;s where luck would  no&hellip;</p><div class='bbgrid'><section class="bbbox">
 <h4 class="bbname">Schr&ouml;dinger bridge</h4>
 <div class="unitgrid"><div class="unit u-pace">
-<div class="uhead"><span class="ulabel">+PACE</span><span class="chips"><span class='mchip spchip'><b>3.6&times; faster inference</b></span><span class="mchip"><b>NFE = 12</b></span></span></div>
+<div class="uhead"><span class="ulabel">+RAPID</span><span class="chips"><span class='mchip spchip'><b>3.6&times; faster inference</b></span><span class="mchip"><b>NFE = 12</b></span></span></div>
 <div class="ubody">
 <video class="rv" controls playsinline preload="none" poster="robot/poster/sb_pace_dns1.jpg" src="robot/video/sb_pace_dns1.mp4"
  data-se="11.0" data-rp="12.67" data-lat="1.67" data-cmp="1.20" data-clip="23.67" data-axis="27.48"></video>
@@ -362,7 +362,7 @@
 </div></div></div></div></section><section class="bbbox">
 <h4 class="bbname">SGMSE+</h4>
 <div class="unitgrid"><div class="unit u-pace">
-<div class="uhead"><span class="ulabel">+PACE</span><span class="chips"><span class='mchip spchip'><b>2.3&times; faster inference</b></span><span class="mchip"><b>NFE = 12</b></span></span></div>
+<div class="uhead"><span class="ulabel">+RAPID</span><span class="chips"><span class='mchip spchip'><b>2.3&times; faster inference</b></span><span class="mchip"><b>NFE = 12</b></span></span></div>
 <div class="ubody">
 <video class="rv" controls playsinline preload="none" poster="robot/poster/sgmse_pace_dns1.jpg" src="robot/video/sgmse_pace_dns1.mp4"
  data-se="11.0" data-rp="13.92" data-lat="2.92" data-cmp="2.26" data-clip="24.92" data-axis="27.48"></video>
@@ -396,7 +396,7 @@
 </div></div></div></div></section></div></article><article class='uttrow'><p class='transcript'>I&#x27;m sorry I did that to you. I really didn&#x27;t mean to hurt you. I feel horrible that that h&hellip;</p><div class='bbgrid'><section class="bbbox">
 <h4 class="bbname">Schr&ouml;dinger bridge</h4>
 <div class="unitgrid"><div class="unit u-pace">
-<div class="uhead"><span class="ulabel">+PACE</span><span class="chips"><span class='mchip spchip'><b>3.4&times; faster inference</b></span><span class="mchip"><b>NFE = 12</b></span></span></div>
+<div class="uhead"><span class="ulabel">+RAPID</span><span class="chips"><span class='mchip spchip'><b>3.4&times; faster inference</b></span><span class="mchip"><b>NFE = 12</b></span></span></div>
 <div class="ubody">
 <video class="rv" controls playsinline preload="none" poster="robot/poster/sb_pace_esm1.jpg" src="robot/video/sb_pace_esm1.mp4"
  data-se="7.89" data-rp="9.17" data-lat="1.28" data-cmp="1.02" data-clip="17.06" data-axis="19.99"></video>
@@ -430,7 +430,7 @@
 </div></div></div></div></section><section class="bbbox">
 <h4 class="bbname">SGMSE+</h4>
 <div class="unitgrid"><div class="unit u-pace">
-<div class="uhead"><span class="ulabel">+PACE</span><span class="chips"><span class='mchip spchip'><b>2.2&times; faster inference</b></span><span class="mchip"><b>NFE = 12</b></span></span></div>
+<div class="uhead"><span class="ulabel">+RAPID</span><span class="chips"><span class='mchip spchip'><b>2.2&times; faster inference</b></span><span class="mchip"><b>NFE = 12</b></span></span></div>
 <div class="ubody">
 <video class="rv" controls playsinline preload="none" poster="robot/poster/sgmse_pace_esm1.jpg" src="robot/video/sgmse_pace_esm1.mp4"
  data-se="7.89" data-rp="9.95" data-lat="2.06" data-cmp="1.83" data-clip="17.84" data-axis="19.99"></video>
@@ -464,7 +464,7 @@
 </div></div></div></div></section></div></article><article class='uttrow'><p class='transcript'>Okay. I usually go to bed around 7.30 or so. I take my clothes and I get a bath and then I&hellip;</p><div class='bbgrid'><section class="bbbox">
 <h4 class="bbname">Schr&ouml;dinger bridge</h4>
 <div class="unitgrid"><div class="unit u-pace">
-<div class="uhead"><span class="ulabel">+PACE</span><span class="chips"><span class='mchip spchip'><b>3.6&times; faster inference</b></span><span class="mchip"><b>NFE = 12</b></span></span></div>
+<div class="uhead"><span class="ulabel">+RAPID</span><span class="chips"><span class='mchip spchip'><b>3.6&times; faster inference</b></span><span class="mchip"><b>NFE = 12</b></span></span></div>
 <div class="ubody">
 <video class="rv" controls playsinline preload="none" poster="robot/poster/sb_pace_ews3.jpg" src="robot/video/sb_pace_ews3.mp4"
  data-se="14.63" data-rp="16.74" data-lat="2.11" data-cmp="1.61" data-clip="31.37" data-axis="36.49"></video>
@@ -498,7 +498,7 @@
 </div></div></div></div></section><section class="bbbox">
 <h4 class="bbname">SGMSE+</h4>
 <div class="unitgrid"><div class="unit u-pace">
-<div class="uhead"><span class="ulabel">+PACE</span><span class="chips"><span class='mchip spchip'><b>2.3&times; faster inference</b></span><span class="mchip"><b>NFE = 12</b></span></span></div>
+<div class="uhead"><span class="ulabel">+RAPID</span><span class="chips"><span class='mchip spchip'><b>2.3&times; faster inference</b></span><span class="mchip"><b>NFE = 12</b></span></span></div>
 <div class="ubody">
 <video class="rv" controls playsinline preload="none" poster="robot/poster/sgmse_pace_ews3.jpg" src="robot/video/sgmse_pace_ews3.mp4"
  data-se="14.63" data-rp="18.04" data-lat="3.41" data-cmp="2.97" data-clip="32.67" data-axis="36.49"></video>
@@ -532,7 +532,7 @@
 </div></div></div></div></section></div></article><article class='uttrow'><p class='transcript'>I will not stay here. God, we simply must trust the character. Stay, stay, I will go mysel&hellip;</p><div class='bbgrid'><section class="bbbox">
 <h4 class="bbname">Schr&ouml;dinger bridge</h4>
 <div class="unitgrid"><div class="unit u-pace">
-<div class="uhead"><span class="ulabel">+PACE</span><span class="chips"><span class='mchip spchip'><b>3.6&times; faster inference</b></span><span class="mchip"><b>NFE = 12</b></span></span></div>
+<div class="uhead"><span class="ulabel">+RAPID</span><span class="chips"><span class='mchip spchip'><b>3.6&times; faster inference</b></span><span class="mchip"><b>NFE = 12</b></span></span></div>
 <div class="ubody">
 <video class="rv" controls playsinline preload="none" poster="robot/poster/sb_pace_ews1.jpg" src="robot/video/sb_pace_ews1.mp4"
  data-se="18.21" data-rp="20.89" data-lat="2.68" data-cmp="1.93" data-clip="39.1" data-axis="45.34"></video>
@@ -566,7 +566,7 @@
 </div></div></div></div></section><section class="bbbox">
 <h4 class="bbname">SGMSE+</h4>
 <div class="unitgrid"><div class="unit u-pace">
-<div class="uhead"><span class="ulabel">+PACE</span><span class="chips"><span class='mchip spchip'><b>2.3&times; faster inference</b></span><span class="mchip"><b>NFE = 12</b></span></span></div>
+<div class="uhead"><span class="ulabel">+RAPID</span><span class="chips"><span class='mchip spchip'><b>2.3&times; faster inference</b></span><span class="mchip"><b>NFE = 12</b></span></span></div>
 <div class="ubody">
 <video class="rv" controls playsinline preload="none" poster="robot/poster/sgmse_pace_ews1.jpg" src="robot/video/sgmse_pace_ews1.mp4"
  data-se="18.21" data-rp="22.46" data-lat="4.25" data-cmp="3.60" data-clip="40.67" data-axis="45.34"></video>
@@ -600,7 +600,7 @@
 </div></div></div></div></section></div></article><article class='uttrow'><p class='transcript'>I&#x27;m just sitting here looking at the sunset. This is the most peaceful place that I have b&hellip;</p><div class='bbgrid'><section class="bbbox">
 <h4 class="bbname">Schr&ouml;dinger bridge</h4>
 <div class="unitgrid"><div class="unit u-pace">
-<div class="uhead"><span class="ulabel">+PACE</span><span class="chips"><span class='mchip spchip'><b>3.6&times; faster inference</b></span><span class="mchip"><b>NFE = 12</b></span></span></div>
+<div class="uhead"><span class="ulabel">+RAPID</span><span class="chips"><span class='mchip spchip'><b>3.6&times; faster inference</b></span><span class="mchip"><b>NFE = 12</b></span></span></div>
 <div class="ubody">
 <video class="rv" controls playsinline preload="none" poster="robot/poster/sb_pace_ews2.jpg" src="robot/video/sb_pace_ews2.mp4"
  data-se="19.96" data-rp="22.65" data-lat="2.69" data-cmp="2.12" data-clip="42.61" data-axis="49.77"></video>
@@ -634,7 +634,7 @@
 </div></div></div></div></section><section class="bbbox">
 <h4 class="bbname">SGMSE+</h4>
 <div class="unitgrid"><div class="unit u-pace">
-<div class="uhead"><span class="ulabel">+PACE</span><span class="chips"><span class='mchip spchip'><b>2.3&times; faster inference</b></span><span class="mchip"><b>NFE = 12</b></span></span></div>
+<div class="uhead"><span class="ulabel">+RAPID</span><span class="chips"><span class='mchip spchip'><b>2.3&times; faster inference</b></span><span class="mchip"><b>NFE = 12</b></span></span></div>
 <div class="ubody">
 <video class="rv" controls playsinline preload="none" poster="robot/poster/sgmse_pace_ews2.jpg" src="robot/video/sgmse_pace_ews2.mp4"
  data-se="19.96" data-rp="24.53" data-lat="4.57" data-cmp="3.95" data-clip="44.49" data-axis="49.77"></video>
@@ -666,7 +666,7 @@
  <div class="mod"><div class="mlab">Enhanced speech</div>
   <audio controls preload="none" src="robot/audio/enh_sgmse_orig_ews2.wav"></audio></div>
 </div></div></div></div></section></div></article>
-    <p class="content robotfoot">The timer starts the moment the speaker falls silent and stops when the robot&rsquo;s own speaker begins to sound, so it carries the sampler, the network hop and the playback pipeline together. It is read off the recording&rsquo;s audio track and agrees with the sampler&rsquo;s logged inference time to within 0.1&ndash;0.6&nbsp;s, which is exactly the push. Over the nine utterances the Schr&ouml;dinger bridge answers in <b>1.68&nbsp;s</b> with +PACE against 4.93&nbsp;s at its default, and SGMSE+ in <b>2.73&nbsp;s</b> against 5.78&nbsp;s. In 3 of the 36 trials a logging fault truncated the archived copy of the enhanced speech; those players carry the offline re-run of the same enhancer on the same input, and the audio heard in the video is untouched.</p>
+    <p class="content robotfoot">The timer starts the moment the speaker falls silent and stops when the robot&rsquo;s own speaker begins to sound, so it carries the sampler, the network hop and the playback pipeline together. It is read off the recording&rsquo;s audio track and agrees with the sampler&rsquo;s logged inference time to within 0.1&ndash;0.6&nbsp;s, which is exactly the push. Over the nine utterances the Schr&ouml;dinger bridge answers in <b>1.68&nbsp;s</b> with +RAPID against 4.93&nbsp;s at its default, and SGMSE+ in <b>2.73&nbsp;s</b> against 5.78&nbsp;s. In 3 of the 36 trials a logging fault truncated the archived copy of the enhanced speech; those players carry the offline re-run of the same enhancer on the same input, and the audio heard in the video is untouched.</p>
   </div>
 </section>
 
@@ -674,7 +674,7 @@
   <div class="container is-max-desktop">
     <h2 class="title is-4">BibTeX</h2>
     <pre class="bibtex"><code>@inproceedings{anonymous2027pace,
-  title     = {PACE: Physical Priors as Adaptive Control for Frozen Diffusion Speech Enhancement},
+  title     = {RAPID: Reliable Acoustic Priors for Efficient Inference in Diffusion-based Speech Enhancement},
   author    = {Anonymous},
   booktitle = {Under review},
   year      = {2027}
