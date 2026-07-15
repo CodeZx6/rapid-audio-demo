@@ -5,8 +5,8 @@ static web server (GitHub Pages, anonymous.4open.science, etc.). No build
 step, no external dependencies, no author-identifying information.
 
 - 15 utterances, 3 per benchmark (VoiceBank-DEMAND, DNS no-reverb, LSM, ESM, EARS-WHAM).
-- Per utterance 4 clips: noisy input / frozen backbone at default NFE /
-  +RAPID at reduced NFE / clean reference (16 kHz mono wav, `audio/`).
+- Four clips per utterance: noisy input / frozen backbone at default NFE /
+  +RAPID at reduced NFE / clean reference (16 kHz mono WAV, `audio/`).
 - `samples.json` holds per-clip metadata: source filename, backbone, NFE,
   PESQ (noisy/backbone/+RAPID), UTMOS and DNSMOS OVRL (backbone vs +RAPID),
   and the transcript shown on the page.
