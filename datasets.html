@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LSM &amp; ESM: Controlled Shift Benchmarks for Speech Enhancement</title>
+<link rel="stylesheet" href="static/css/bulma.min.css"><link rel="stylesheet" href="static/css/index.css">
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Noto+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+.dbadge{display:inline-block;font-size:.72rem;font-weight:600;padding:2px 9px;border-radius:11px;margin:2px 3px;background:#eef0f4;color:#3a3f4b}
+.dbadge.nc{background:#f4ecec;color:#7a3b3b}
+.dbadge.ok{background:#e7f0ea;color:#256143}
+.gtable td,.gtable th{vertical-align:middle}
+.pairgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-top:10px}
+.paircard{border:1px solid #e6e8ec;border-radius:9px;padding:11px 12px;background:#fff}
+.paircard h4{font-weight:600;font-size:.85rem;margin-bottom:7px;color:#2b2b28}
+.paircard .row{display:flex;align-items:center;gap:7px;margin:5px 0}
+.paircard .lab{font-size:.7rem;font-weight:600;min-width:52px;color:#6d6a60}
+.paircard .lab.mix{color:#0a5c42}
+.paircard audio{height:30px;flex:1}
+.dllist{list-style:none;margin-left:0}
+.dllist li{margin:7px 0;display:flex;gap:9px;align-items:baseline;flex-wrap:wrap}
+.dllist .k{font-weight:600;min-width:150px}
+.mono{font-family:ui-monospace,monospace;font-size:.82rem;background:#f4f5f7;padding:1px 5px;border-radius:4px}
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered"><div class="column has-text-centered">
+        <h1 class="title is-2 publication-title">LSM &amp; ESM</h1>
+        <div class="is-size-5">Controlled distribution-shift benchmarks for speech enhancement</div>
+        <div class="is-size-6 publication-venue" style="margin-top:.5rem">Companion data for a paper under double blind review</div>
+        <div style="margin-top:.7rem">
+          <span class="dbadge ok">16 kHz &middot; PCM16</span>
+          <span class="dbadge">300 pairs each</span>
+          <span class="dbadge">LSM: CC BY 4.0</span>
+          <span class="dbadge nc">ESM: CC BY-NC 4.0</span>
+        </div>
+        <div class="publication-links" style="margin-top:.8rem">
+          <span class="link-block"><a class="external-link button is-dark is-rounded is-small" href="#download">&#11015;&nbsp;Download &amp; reproduce</a></span>
+          <span class="link-block"><a class="external-link button is-primary is-rounded is-small" href="index.html">&#128266;&nbsp;Back to demo</a></span>
+        </div>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section pt-2">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3">Overview</h2>
+    <div class="content has-text-justified">
+      <p>LSM and ESM are two reproducible noisy-speech benchmarks built to isolate a
+      single distribution shift at a time. Both draw their noise from MUSAN and follow
+      one shared mixing protocol, so the only thing that changes between them is the
+      speech source. <b>LSM</b> (LibriSpeech-MUSAN) pairs read speech with out-of-family
+      noise and isolates a <b>noise-family shift</b>. <b>ESM</b> (EARS-MUSAN) replaces the
+      read speech with expressive EARS speech under the identical recipe and isolates a
+      <b>speech-style shift</b>. Holding everything else fixed lets a single benchmark
+      leg attribute a change in enhancement quality to one axis of the shift.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section pt-2 altband">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3">At a glance</h2>
+    <table class="table is-fullwidth gtable">
+      <thead><tr><th>Dataset</th><th>Speech source</th><th>Noise</th><th>Pairs</th><th>SNR (dB)</th><th>Isolates</th><th>License</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><b>LSM</b></td><td>LibriSpeech test-clean (read)</td><td>MUSAN</td>
+          <td>300</td><td>2.5 / 7.5 / 12.5 / 17.5</td><td>Noise-family shift</td><td>CC BY 4.0</td>
+        </tr>
+        <tr>
+          <td><b>ESM</b></td><td>EARS p102&ndash;p107 (expressive)</td><td>MUSAN</td>
+          <td>300</td><td>2.5 / 7.5 / 12.5 / 17.5</td><td>Speech-style shift</td><td>CC BY-NC 4.0</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="is-size-7" style="color:#6d6a60">Each pair provides an aligned clean reference and its noisy mixture. SNR levels are assigned round-robin by pair index.</p>
+  </div>
+</section>
+
+<section class="section pt-2">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3">Construction protocol</h2>
+    <div class="content has-text-justified">
+      <p>Both sets are produced by one script and differ only in the speech source. For
+      each pair the speech and noise are resampled to 16 kHz, the noise is looped to the
+      speech length and offset by a seeded fraction, and its power is scaled to the target
+      SNR. A single anti-clip rescale is applied to the clean and noisy signals together,
+      so the pair stays perfectly aligned. Every random draw comes from one seeded
+      generator (<span class="mono">seed 1234</span> for LSM, <span class="mono">seed 4321</span>
+      for ESM), which makes the build bit-exact: regenerating from the public source
+      corpora reproduces the released waveforms, and the published SHA-256 lists let you
+      verify it.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section pt-2 altband">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3">Listen</h2>
+    <p class="is-size-7" style="color:#6d6a60">Aligned clean reference and noisy mixture for three example utterances from each set.</p>
+    <h3 class="title is-5" style="margin-top:1rem">LSM &middot; read speech, out-of-family noise</h3>
+    <div class="pairgrid">
+      <div class="paircard"><h4>LSM example 1</h4>
+        <div class="row"><span class="lab">clean</span><audio controls preload="none" src="audio/lsm1_clean.wav"></audio></div>
+        <div class="row"><span class="lab mix">mixture</span><audio controls preload="none" src="audio/lsm1_noisy.wav"></audio></div></div>
+      <div class="paircard"><h4>LSM example 2</h4>
+        <div class="row"><span class="lab">clean</span><audio controls preload="none" src="audio/lsm2_clean.wav"></audio></div>
+        <div class="row"><span class="lab mix">mixture</span><audio controls preload="none" src="audio/lsm2_noisy.wav"></audio></div></div>
+      <div class="paircard"><h4>LSM example 3</h4>
+        <div class="row"><span class="lab">clean</span><audio controls preload="none" src="audio/lsm3_clean.wav"></audio></div>
+        <div class="row"><span class="lab mix">mixture</span><audio controls preload="none" src="audio/lsm3_noisy.wav"></audio></div></div>
+    </div>
+    <h3 class="title is-5" style="margin-top:1.4rem">ESM &middot; expressive speech, same noise recipe</h3>
+    <div class="pairgrid">
+      <div class="paircard"><h4>ESM example 1</h4>
+        <div class="row"><span class="lab">clean</span><audio controls preload="none" src="audio/esm1_clean.wav"></audio></div>
+        <div class="row"><span class="lab mix">mixture</span><audio controls preload="none" src="audio/esm1_noisy.wav"></audio></div></div>
+      <div class="paircard"><h4>ESM example 2</h4>
+        <div class="row"><span class="lab">clean</span><audio controls preload="none" src="audio/esm2_clean.wav"></audio></div>
+        <div class="row"><span class="lab mix">mixture</span><audio controls preload="none" src="audio/esm2_noisy.wav"></audio></div></div>
+      <div class="paircard"><h4>ESM example 3</h4>
+        <div class="row"><span class="lab">clean</span><audio controls preload="none" src="audio/esm3_clean.wav"></audio></div>
+        <div class="row"><span class="lab mix">mixture</span><audio controls preload="none" src="audio/esm3_noisy.wav"></audio></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section pt-2" id="download">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3">Download &amp; reproduce</h2>
+    <div class="content">
+      <p>Two ways to obtain the data. The lightweight route regenerates the exact
+      waveforms from the public source corpora; the packaged route downloads the
+      mixtures directly.</p>
+
+      <h3 class="title is-5">Regenerate from source (bit-exact)</h3>
+      <ul class="dllist">
+        <li><span class="k">Build scripts</span><a class="mono" href="datasets/build_lsm.py">build_lsm.py</a><a class="mono" href="datasets/build_esm.py">build_esm.py</a></li>
+        <li><span class="k">Per-mixture manifests</span><a class="mono" href="datasets/lsm_manifest.csv">lsm_manifest.csv</a><a class="mono" href="datasets/esm_manifest.csv">esm_manifest.csv</a></li>
+        <li><span class="k">SHA-256 checksums</span><a class="mono" href="datasets/lsm_sha256.txt">lsm_sha256.txt</a><a class="mono" href="datasets/esm_sha256.txt">esm_sha256.txt</a></li>
+        <li><span class="k">Source corpora</span>
+          <a href="https://www.openslr.org/12">LibriSpeech</a>
+          <a href="https://www.openslr.org/17">MUSAN</a>
+          <a href="https://sp-uhh.github.io/ears_dataset/">EARS</a></li>
+      </ul>
+      <p class="is-size-7" style="color:#6d6a60">Download the source corpora, run each build script, and check the output against the SHA-256 lists. The manifests record the index, SNR, file names and per-clip checksums of the released set.</p>
+
+      <h3 class="title is-5" style="margin-top:1.2rem">Packaged mixtures</h3>
+      <ul class="dllist">
+        <li><span class="k">LSM (clean + noisy)</span><a href="https://github.com/CodeZx6/rapid-audio-demo/releases/latest">lsm_ood.zip</a><span class="is-size-7" style="color:#6d6a60">CC BY 4.0</span></li>
+        <li><span class="k">ESM (clean + noisy)</span><a href="https://github.com/CodeZx6/rapid-audio-demo/releases/latest">esm_ood.zip</a><span class="is-size-7" style="color:#6d6a60">CC BY-NC 4.0</span></li>
+      </ul>
+      <p class="is-size-7" style="color:#6d6a60">Packaged archives are attached to the repository release. Each archive holds <span class="mono">clean/</span> and <span class="mono">noisy/</span> at 16 kHz PCM16, named <span class="mono">{lsm,esm}_INDEX_snrSNR.wav</span>.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section pt-2 altband">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3">License &amp; attribution</h2>
+    <div class="content has-text-justified">
+      <p><b>LSM</b> is released under <b>CC BY 4.0</b>, inherited from LibriSpeech and MUSAN.
+      <b>ESM</b> is released under <b>CC BY-NC 4.0</b>, inherited from EARS, and is therefore
+      for non-commercial research use. When using either set, cite this work and the
+      underlying source corpora (LibriSpeech, MUSAN, and, for ESM, EARS).</p>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container is-max-desktop">
+    <p class="has-text-centered is-size-7">Companion data page for an anonymized submission under review. This page contains no information identifying the authors. Page template adapted from the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template">Academic Project Page Template</a> and <a href="https://nerfies.github.io/">Nerfies</a> (CC BY-SA 4.0).</p>
+  </div>
+</footer>
+
+</body>
+</html>
